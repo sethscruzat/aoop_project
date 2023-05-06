@@ -2,9 +2,11 @@
   <library name="UCanAccess">
     <CLASSES>
       <root url="file://$USER_HOME$/OneDrive/Desktop/UCanAccess-5.0.1.bin/UCanAccess" />
+      <root url="file://$PROJECT_DIR$/dependencies/UCanAccess" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/dependencies/UCanAccess" recursive="false" />
     <jarDirectory url="file://$USER_HOME$/OneDrive/Desktop/UCanAccess-5.0.1.bin/UCanAccess" recursive="false" />
   </library>
 </component>
