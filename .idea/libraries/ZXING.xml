@@ -2,9 +2,11 @@
   <library name="ZXING">
     <CLASSES>
       <root url="file://$USER_HOME$/OneDrive/Desktop/UCanAccess-5.0.1.bin/ZXING" />
+      <root url="file://$PROJECT_DIR$/dependencies/ZXING" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/dependencies/ZXING" recursive="false" />
     <jarDirectory url="file://$USER_HOME$/OneDrive/Desktop/UCanAccess-5.0.1.bin/ZXING" recursive="false" />
   </library>
 </component>
