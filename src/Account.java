@@ -45,6 +45,7 @@ public class Account implements Draw{
         int x = (int) ((dimension.getWidth() - accountFrm.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - accountFrm.getHeight()) / 2);
         accountFrm.setLocation(x, y);
+        accountFrm.getContentPane().setBackground(new Color(222,194,186));
     }
 
     @Override
@@ -62,12 +63,19 @@ public class Account implements Draw{
         });
 
         item2.addActionListener(e -> {
-            accountFrm.dispose();
-            new Login();
+            int a = JOptionPane.showConfirmDialog(accountFrm, "Are you sure you want to logout?");
+            if (a == JOptionPane.YES_OPTION){
+                accountFrm.dispose();
+                new Login();
+            }
         });
         menu.add(item1);
         menu.add(item2);
         menuBar.add(menu);
+        menuBar.setBackground(new Color(251,250,249));
+        menu.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        item1.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        item2.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
         accountFrm.setJMenuBar(menuBar);
     }
 
@@ -89,25 +97,25 @@ public class Account implements Draw{
 
 
         dateLabel.setBounds(50,250, 150,40);
-        dateLabel.setFont(new Font("Sans Serif", Font.PLAIN, 18));
+        dateLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         sexLabel.setBounds(50,290, 150,40);
-        sexLabel.setFont(new Font("Sans Serif", Font.PLAIN, 18));
+        sexLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         civilLabel.setBounds(50,330, 150,40);
-        civilLabel.setFont(new Font("Sans Serif", Font.PLAIN, 18));
+        civilLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         addressLabel.setBounds(50,370, 150,40);
-        addressLabel.setFont(new Font("Sans Serif", Font.PLAIN, 18));
+        addressLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         contactLabel.setBounds(50,410, 150,40);
-        contactLabel.setFont(new Font("Sans Serif", Font.PLAIN, 18));
+        contactLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         emailLabel.setBounds(50,450, 150,40);
-        emailLabel.setFont(new Font("Sans Serif", Font.PLAIN, 18));
+        emailLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         balanceLabel.setBounds(500,245, 150,40);
-        balanceLabel.setFont(new Font("Sans Serif", Font.PLAIN, 18));
+        balanceLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         accountFrm.add(dateLabel);
         accountFrm.add(sexLabel);
@@ -154,31 +162,31 @@ public class Account implements Draw{
         addressDisplay.setText(address);
         contactDisplay.setText(contactNumber);
         emailDisplay.setText(emailAddress);
-        balanceDisplay.setText("₱ " + currentBalance);
+        balanceDisplay.setText("Php " + currentBalance);
 
         nameLabel.setBounds(225,115,300,40);
-        nameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 22));
+        nameLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 22));
 
         dateDisplay.setBounds(200,250, 250,40);
-        dateDisplay.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        dateDisplay.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         sexDisplay.setBounds(200,290, 150,40);
-        sexDisplay.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        sexDisplay.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         civilDisplay.setBounds(200,330, 200,40);
-        civilDisplay.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        civilDisplay.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         addressDisplay.setBounds(200,370, 250,40);
-        addressDisplay.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        addressDisplay.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         contactDisplay.setBounds(200,410, 250,40);
-        contactDisplay.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        contactDisplay.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         emailDisplay.setBounds(200,450, 250,40);
-        emailDisplay.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        emailDisplay.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         balanceDisplay.setBounds(525,300, 250,40);
-        balanceDisplay.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        balanceDisplay.setFont(new Font("Trebuchet MS", Font.PLAIN, 18));
 
         accountFrm.add(nameLabel);
         accountFrm.add(dateDisplay);
@@ -219,30 +227,46 @@ public class Account implements Draw{
         dateProperty.put("text.year", "Year");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, dateProperty);
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Auxiliary.DateLabelFormatter());
-        datePicker.setBounds(230,260,175,30); //date
+        datePicker.setBounds(230,260,175,30);
 
         JTextField sexField = new JTextField(); //string
         sexField.setBounds(230,300,225,25);
+        sexField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        sexField.setBackground(new Color(237,226,222));
 
-        JComboBox<String> civilField = new JComboBox<>(status); //string
+        JComboBox<String> civilField = new JComboBox<>(status);
         civilField.setBounds(230,340,225,25);
+        civilField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        civilField.setBackground(new Color(237,226,222));
 
-        JTextField addressField = new JTextField(); //string
+        JTextField addressField = new JTextField();
         addressField.setBounds(230,380,225,25);
+        addressField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        addressField.setBackground(new Color(237,226,222));
 
-        JTextField contactField = new JTextField(); //int
+        JTextField contactField = new JTextField();
         contactField.setBounds(230,420,225,25);
+        contactField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        contactField.setBackground(new Color(237,226,222));
 
-        JTextField emailField = new JTextField(); //string
+        JTextField emailField = new JTextField();
         emailField.setBounds(230,460,225,25);
+        emailField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        emailField.setBackground(new Color(237,226,222));
 
         JPanel editPanel = new JPanel();
         editPanel.setBounds(350,550,400,75);
+        editPanel.setBackground(new Color(222,194,186));
 
         JButton saveBtn = new JButton("Save Changes");
         saveBtn.setSize(100,25);
+        saveBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        saveBtn.setBackground(new Color(237,226,222));
+
         JButton cancel = new JButton("Cancel Editing");
         cancel.setSize(100,25);
+        cancel.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        cancel.setBackground(new Color(237,226,222));
 
         editPanel.add(saveBtn);
         editPanel.add(cancel);
@@ -314,10 +338,23 @@ public class Account implements Draw{
 
 
         btnPanel.setBounds(350,550,400,75);
+        btnPanel.setBackground(new Color(222,194,186));
+
         historyBtn.setSize(50,25);
+        historyBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        historyBtn.setBackground(new Color(237,226,222));
+
         withdrawBtn.setSize(50,25);
+        withdrawBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        withdrawBtn.setBackground(new Color(237,226,222));
+
         depositBtn.setSize(50,25);
+        depositBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        depositBtn.setBackground(new Color(237,226,222));
+
         exitBtn.setSize(50,25);
+        exitBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        exitBtn.setBackground(new Color(237,226,222));
 
         btnPanel.add(historyBtn);
         btnPanel.add(withdrawBtn);

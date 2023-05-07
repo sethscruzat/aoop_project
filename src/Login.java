@@ -14,8 +14,8 @@ public class Login{
     protected JFrame loginFrm = new JFrame();
     protected JFrame signUpFrm = new JFrame();
     protected JFrame signUpAccountFrm = new JFrame();
-    protected JTextField usernameField = new JTextField("Enter your ID");
-    protected JTextField passwordField =  new JTextField("Enter Your Password");
+    protected JTextField usernameField = new JTextField();
+    protected JTextField passwordField =  new JTextField();
     protected JButton loginBtn = new JButton("LOGIN");
     protected PreparedStatement pst = null;
     protected ResultSet rs = null;
@@ -32,32 +32,43 @@ public class Login{
         loginFrm.setTitle("Welcome!");
         loginFrm.setLayout(null);
         loginFrm.setVisible(true);
-        loginFrm.setSize(550,550);
+        loginFrm.setSize(400,400);
 
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - loginFrm.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - loginFrm.getHeight()) / 2);
         loginFrm.setLocation(x, y);
         loginFrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loginFrm.getContentPane().setBackground(new Color(222,194,186));
     }
 
     public void drawLoginElements(){
         JLabel userLabel = new JLabel("Username: ");
         JLabel passLabel = new JLabel("Password: ");
+        userLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
+        passLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
+        
+        loginBtn.setBounds(250,275,90,25);
+        loginBtn.setBackground(new Color(237,226,222));
+        loginBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 
-        loginBtn.setBounds(300,300,75,25);
+        userLabel.setBounds(50,120,90,75);
+        passLabel.setBounds(50,165,90,75);
 
-        userLabel.setBounds(80,120,75,75);
-        passLabel.setBounds(80,155,75,75);
+        usernameField.setBounds(150,150,150,22);
+        usernameField.setBackground(new Color(237,226,222));
+        usernameField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
-        usernameField.setBounds(150,150,125,20);
-        passwordField.setBounds(150,185,125,20);
+        passwordField.setBounds(150,195,150,22);
+        passwordField.setBackground(new Color(237,226,222));
+        passwordField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         loginFrm.add(userLabel);
         loginFrm.add(passLabel);
         loginFrm.add(usernameField);
         loginFrm.add(passwordField);
         loginFrm.add(loginBtn);
+        usernameField.requestFocus();
 
         usernameField.addKeyListener(new KeyListener(){
             @Override
@@ -104,7 +115,8 @@ public class Login{
 
     public void drawSignUpLabel(){
         JLabel signUp = new JLabel("No account?");
-        signUp.setBounds(80,200,120,40);
+        signUp.setBounds(50,215,120,40);
+        signUp.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 
         loginFrm.add(signUp);
 
@@ -132,6 +144,7 @@ public class Login{
         signUpFrm.setLayout(null);
         signUpFrm.setVisible(true);
         signUpFrm.setSize(400,400);
+        signUpFrm.getContentPane().setBackground(new Color(222,194,186));
 
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - signUpFrm.getWidth()) / 2);
@@ -141,33 +154,45 @@ public class Login{
         JLabel userLabel = new JLabel("Username:");
         JLabel passLabel = new JLabel("Password:");
 
-        userLabel.setBounds(70,130,75,40);
-        userLabel.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+        userLabel.setBounds(70,130,90,40);
+        userLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
 
-        passLabel.setBounds(70,170,75,40);
-        passLabel.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+        passLabel.setBounds(70,170,90,40);
+        passLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
 
         signUpFrm.add(userLabel);
         signUpFrm.add(passLabel);
 
         JTextField userField = new JTextField();
         JTextField passField = new JTextField();
-        userField.setBounds(180,145,150,25);
-        passField.setBounds(180,185,150,25);
+        userField.setBounds(180,140,150,25);
+        userField.setBackground(new Color(237,226,222));
+        userField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+
+        passField.setBounds(180,180,150,25);
+        passField.setBackground(new Color(237,226,222));
+        passField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         signUpFrm.add(userField);
         signUpFrm.add(passField);
 
         JPanel btnPanel = new JPanel();
-        btnPanel.setBounds(150,280,225,40);
+        btnPanel.setBounds(110,275,250,40);
+        btnPanel.setBackground(new Color(222,194,186));
+
         JButton continueBtn = new JButton("Continue");
         JButton returnBtn = new JButton("Return to Login");
 
-        continueBtn.setSize(50,25);
-        returnBtn.setSize(100,25);
+        continueBtn.setSize(50,27);
+        continueBtn.setBackground(new Color(237,226,222));
+        continueBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+
+        returnBtn.setSize(50,27);
+        returnBtn.setBackground(new Color(237,226,222));
+        returnBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+
         btnPanel.add(continueBtn);
         btnPanel.add(returnBtn);
-
         signUpFrm.add(btnPanel);
 
         continueBtn.addActionListener(e ->{
@@ -220,6 +245,7 @@ public class Login{
         signUpAccountFrm.setLayout(null);
         signUpAccountFrm.setVisible(true);
         signUpAccountFrm.setSize(600,600);
+        signUpAccountFrm.getContentPane().setBackground(new Color(222,194,186));
 
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - signUpAccountFrm.getWidth()) / 2);
@@ -232,31 +258,31 @@ public class Login{
     public void drawSignUpInfoLabels(){
         JLabel nameLabel = new JLabel("Full Name: ");
         nameLabel.setBounds(50,100,100,30);
-        nameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+        nameLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JLabel dateLabel = new JLabel("Date of Birth:");
         dateLabel.setBounds(50,150,100,30);
-        dateLabel.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+        dateLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JLabel sexLabel = new JLabel("Sex: ");
         sexLabel.setBounds(50,200,100,30);
-        sexLabel.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+        sexLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JLabel civilLabel = new JLabel("Civil Status: ");
         civilLabel.setBounds(50,250,100,30);
-        civilLabel.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+        civilLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JLabel addressLabel = new JLabel("Home Address: ");
         addressLabel.setBounds(50,300,150,30);
-        addressLabel.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+        addressLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JLabel contactLabel = new JLabel("Contact Number: ");
         contactLabel.setBounds(50,350,150,30);
-        contactLabel.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+        contactLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JLabel emailLabel = new JLabel("E-mail Address: ");
         emailLabel.setBounds(50,400,150,30);
-        emailLabel.setFont(new Font("Sans Serif", Font.PLAIN, 15));
+        emailLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         signUpAccountFrm.add(nameLabel);
         signUpAccountFrm.add(dateLabel);
@@ -270,6 +296,8 @@ public class Login{
     public void drawSignUpInfoFields(){
         JTextField nameField = new JTextField(); //string
         nameField.setBounds(210,110,190,25);
+        nameField.setBackground(new Color(237,226,222));
+        nameField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         UtilDateModel model = new UtilDateModel();
         Properties dateProperty = new Properties();
@@ -282,22 +310,34 @@ public class Login{
 
         JTextField sexField = new JTextField(); //string
         sexField.setBounds(210,210,190,25);
+        sexField.setBackground(new Color(237,226,222));
+        sexField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         String[] status =  {"Select one from the list", "Single", "Married", "Widowed"};
         JComboBox<String> civilField = new JComboBox<>(status); //string
         civilField.setBounds(210,260,190,25);
+        civilField.setBackground(new Color(237,226,222));
+        civilField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JTextField addressField = new JTextField(); //string
         addressField.setBounds(210,310,190,25);
+        addressField.setBackground(new Color(237,226,222));
+        addressField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JTextField contactField = new JTextField(); //string
         contactField.setBounds(210,360,190,25);
+        contactField.setBackground(new Color(237,226,222));
+        contactField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JTextField emailField = new JTextField(); //string
         emailField.setBounds(210,410,190,25);
+        emailField.setBackground(new Color(237,226,222));
+        emailField.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
 
         JButton signBtn = new JButton("Sign Up");
-        signBtn.setBounds(420,520,100,25);
+        signBtn.setBounds(420,500,100,25);
+        signBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+        signBtn.setBackground(new Color(237,226,222));
 
         signUpAccountFrm.add(nameField);
         signUpAccountFrm.add(datePicker);

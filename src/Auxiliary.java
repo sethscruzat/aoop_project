@@ -1,5 +1,4 @@
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -127,7 +126,7 @@ public class Auxiliary {
         }
 
         JTable withdrawTable = new JTable(withdrawList, withdrawCol);
-        withdrawTable.setSize(325,290);
+        withdrawTable.setSize(325,275);
         withdrawTable.setDefaultEditor(Object.class, null);
 
         return withdrawTable;
@@ -179,7 +178,7 @@ public class Auxiliary {
         depositCol.addElement("Amount Deposited");
 
         JTable depositTable = new JTable(depositList, depositCol);
-        depositTable.setSize(325,290);
+        depositTable.setSize(325,275);
         depositTable.setDefaultEditor(Object.class,null);
 
         return depositTable;

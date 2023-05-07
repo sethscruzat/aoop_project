@@ -2,9 +2,12 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.Properties;
@@ -27,12 +30,13 @@ public class Withdraw implements Draw{
         withdrawFrm.setTitle("Welcome!");
         withdrawFrm.setLayout(null);
         withdrawFrm.setVisible(true);
-        withdrawFrm.setSize(600,500);
+        withdrawFrm.setSize(750,650);
 
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - withdrawFrm.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - withdrawFrm.getHeight()) / 2);
         withdrawFrm.setLocation(x, y);
+        withdrawFrm.getContentPane().setBackground(new Color(222,194,186));
     }
 
     @Override
@@ -43,8 +47,11 @@ public class Withdraw implements Draw{
 
         item1 = new JMenuItem("Logout");
         item1.addActionListener(e -> {
-            withdrawFrm.dispose();
-            new Login();
+            int a = JOptionPane.showConfirmDialog(withdrawFrm, "Are you sure you want to logout?");
+            if (a == JOptionPane.YES_OPTION){
+                withdrawFrm.dispose();
+                new Login();
+            }
         });
 
         item2 = new JMenuItem("Exit ");
@@ -54,6 +61,11 @@ public class Withdraw implements Draw{
                 System.exit(0);
             }
         });
+        menuBar.setBackground(new Color(251,250,249));
+        menu.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        item1.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        item2.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+
         menu.add(item1);
         menu.add(item2);
         menuBar.add(menu);
@@ -64,28 +76,30 @@ public class Withdraw implements Draw{
         JLabel title = new JLabel("Withdraw");
         JLabel subtitle = new JLabel("Please input the necessary details");
 
-        title.setBounds(20,135,150,40);
-        title.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-        subtitle.setBounds(20,155,250,40);
-        subtitle.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        title.setBounds(20,225,200,60);
+        title.setFont(new Font("Trebuchet MS", Font.PLAIN, 20));
+        subtitle.setBounds(20,255,300,60);
+        subtitle.setFont(new Font("Trebuchet MS", Font.PLAIN, 17));
         withdrawFrm.add(title);
         withdrawFrm.add(subtitle);
 
         JLabel customer_ID = new JLabel("Customer ID:");
-        customer_ID.setBounds(50,215,150,30);
-        customer_ID.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        customer_ID.setBounds(50,325,150,30);
+        customer_ID.setFont(new Font("Trebuchet MS", Font.PLAIN, 17));
 
         JLabel date = new JLabel("Planned date of withdrawal:");
-        date.setBounds(50,265,250,30);
-        date.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        date.setBounds(50,375,250,30);
+        date.setFont(new Font("Trebuchet MS", Font.PLAIN, 17));
 
         JLabel amount = new JLabel("Amount to withdraw:");
-        amount.setBounds(50,320,150,30);
-        amount.setFont(new Font("Sans Serif", Font.PLAIN, 16));
+        amount.setBounds(50,430,170,30);
+        amount.setFont(new Font("Trebuchet MS", Font.PLAIN, 17));
 
         String displayID = Integer.toString(userID);
         JTextField idField = new JTextField(displayID);
-        idField.setBounds(280,220,175,25);
+        idField.setBounds(280,330,175,25);
+        idField.setBackground(new Color(237,226,222));
+        idField.setFont(new Font("Trebuchet MS", Font.PLAIN, 17));
         idField.setEditable(false);
 
         UtilDateModel model = new UtilDateModel();
@@ -95,15 +109,22 @@ public class Withdraw implements Draw{
         dateProperty.put("text.year", "Year");
         JDatePanelImpl datePanel = new JDatePanelImpl(model, dateProperty);
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new Auxiliary.DateLabelFormatter());
-        datePicker.setBounds(280,270,175,30);
+        datePicker.setBounds(280,380,175,30);
 
         JTextField amountField = new JTextField();
-        amountField.setBounds(280,325,175,25);
+        amountField.setBounds(280,440,175,25);
+        amountField.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
+        amountField.setBackground(new Color(237,226,222));
 
         JButton generate = new JButton("Generate QR Code");
-        generate.setBounds(300,380, 155,27);
+        generate.setBounds(400,510, 175,27);
+        generate.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
+        generate.setBackground(new Color(237,226,222));
+
         JButton returnBtn = new JButton("Return");
-        returnBtn.setBounds(475,380,75,27);
+        returnBtn.setBounds(585,510,100,27);
+        returnBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
+        returnBtn.setBackground(new Color(237,226,222));
 
         withdrawFrm.add(customer_ID);
         withdrawFrm.add(date);
@@ -111,6 +132,7 @@ public class Withdraw implements Draw{
         withdrawFrm.add(idField);
         withdrawFrm.add(datePicker);
         withdrawFrm.add(amountField);
+        amountField.requestFocus();
         withdrawFrm.add(generate);
         withdrawFrm.add(returnBtn);
 
@@ -164,10 +186,15 @@ public class Withdraw implements Draw{
     }
 
     public void drawElements(){
-        JPanel header = new JPanel();
-        header.setBounds(0,0,600,125);
-        header.setBackground(new Color(196,240,173));
+        try {
+            BufferedImage myPicture = ImageIO.read(new File(path+"\\img\\header.png"));
+            Image newImage = myPicture.getScaledInstance(750, 225, Image.SCALE_AREA_AVERAGING);
+            JLabel header = new JLabel(new ImageIcon(newImage));
+            header.setBounds(0,0,750,225);
 
-        withdrawFrm.add(header);
+            withdrawFrm.add(header);
+        } catch (IOException error){
+            error.printStackTrace();
+        }
     }
 }

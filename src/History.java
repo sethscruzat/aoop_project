@@ -1,9 +1,15 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 public class History implements Draw{
     protected JFrame historyFrm = new JFrame();
+    protected File currentDir = new File("");
+    protected String path = currentDir.getAbsolutePath();
 
     History(JFrame account, int customer_ID){
         drawForm();
@@ -23,6 +29,7 @@ public class History implements Draw{
         int x = (int) ((dimension.getWidth() - historyFrm.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - historyFrm.getHeight()) / 2);
         historyFrm.setLocation(x, y);
+        historyFrm.getContentPane().setBackground(new Color(222,194,186));
     }
 
     @Override
@@ -33,8 +40,11 @@ public class History implements Draw{
 
         item1 = new JMenuItem("Logout");
         item1.addActionListener(e -> {
-            historyFrm.dispose();
-            new Login();
+            int a = JOptionPane.showConfirmDialog(historyFrm, "Are you sure you want to logout?");
+            if (a == JOptionPane.YES_OPTION){
+                historyFrm.dispose();
+                new Login();
+            }
         });
 
         item2 = new JMenuItem("Exit");
@@ -45,6 +55,11 @@ public class History implements Draw{
             }
         });
 
+        menuBar.setBackground(new Color(251,250,249));
+        menu.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        item1.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        item2.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+
         menu.add(item1);
         menu.add(item2);
         menuBar.add(menu);
@@ -52,41 +67,36 @@ public class History implements Draw{
     }
 
     public void drawLabels(){
-        //JLabel transactionLabel = new JLabel("Transactions");
-        JPanel header = new JPanel();
-        header.setBounds(0,0,800,150);
-        header.setBackground(new Color(196,240,173));
-
         JLabel withdrawLabel = new JLabel("Withdrawals");
         JLabel depositLabel = new JLabel("Deposits");
 
-        //transactionLabel.setBounds(345,30,150,40);
-        //transactionLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+        withdrawLabel.setBounds(135,230,150,40);
+        withdrawLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 20));
 
-        withdrawLabel.setBounds(135,175,150,40);
-        withdrawLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
+        depositLabel.setBounds(560,230,150,40);
+        depositLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 20));
 
-        depositLabel.setBounds(560,175,150,40);
-        depositLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-
-        //historyFrm.add(transactionLabel);
         historyFrm.add(withdrawLabel);
         historyFrm.add(depositLabel);
-        historyFrm.add(header);
+        try {
+            BufferedImage myPicture = ImageIO.read(new File(path+"\\img\\header.png"));
+            Image newImage = myPicture.getScaledInstance(800, 225, Image.SCALE_AREA_AVERAGING);
+            JLabel header = new JLabel(new ImageIcon(newImage));
+            header.setBounds(0,0,800,225);
+
+            historyFrm.add(header);
+        } catch (IOException error){
+            error.printStackTrace();
+        }
     }
 
     public void drawTables(int ID) {
-        //JTable transactionTable = new JTable();
-
-        //JScrollPane transactPane = new JScrollPane(transactionTable);
         JScrollPane withdrawPane = new JScrollPane(Auxiliary.getWithdrawValues(ID));
         JScrollPane depositPane = new JScrollPane(Auxiliary.getDepositValues(ID));
 
-        //transactPane.setBounds(230,70,350,225);
-        withdrawPane.setBounds(55,225,325,290);
-        depositPane.setBounds(440,225,325,290);
+        withdrawPane.setBounds(40,275,325,275);
+        depositPane.setBounds(430,275,325,275);
 
-        //historyFrm.add(transactPane);
         historyFrm.add(withdrawPane);
         historyFrm.add(depositPane);
     }
@@ -94,7 +104,9 @@ public class History implements Draw{
 
     public void drawButtons(JFrame account) {
         JButton returnBtn = new JButton("Return");
-        returnBtn.setBounds(660,575,75,25);
+        returnBtn.setBounds(660,575,100,27);
+        returnBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
+        returnBtn.setBackground(new Color(237,226,222));
 
         historyFrm.add(returnBtn);
 
