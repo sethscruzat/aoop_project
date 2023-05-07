@@ -5,6 +5,7 @@ import org.jdatepicker.impl.UtilDateModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.Properties;
@@ -19,6 +20,8 @@ public class Login{
     protected PreparedStatement pst = null;
     protected ResultSet rs = null;
     protected Connection con = null;
+    protected File currentDir = new File("");
+    protected String path = currentDir.getAbsolutePath();
 
     public Login(){
         drawLoginForm();
@@ -79,7 +82,7 @@ public class Login{
             }else{
                 try {
                     Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-                    con = DriverManager.getConnection("jdbc:ucanaccess://C:\\Project\\GUI_Database.accdb");
+                    con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
                     String sql = "select customer_ID from LOGIN where username= '" + username + "' and password= '" + password + "'";
 
                     pst = con.prepareStatement(sql);
@@ -175,7 +178,7 @@ public class Login{
             }else {
                 try{
                     Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-                    con = DriverManager.getConnection("jdbc:ucanaccess://C:\\Project\\GUI_Database.accdb");
+                    con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
                     String sql = "select username from LOGIN";
                     pst = con.prepareStatement(sql);
                     rs = pst.executeQuery();
@@ -321,7 +324,7 @@ public class Login{
                     Calendar newUserDate = (Calendar) userDate;
                     java.sql.Date sqlDate =  new java.sql.Date(newUserDate.getTimeInMillis());
                     Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-                    con = DriverManager.getConnection("jdbc:ucanaccess://C:\\Project\\GUI_Database.accdb");
+                    con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
 
                     String sql = "INSERT INTO CUSTOMER_INFO (fullName, birthDate, sex, civilStatus, address, contactNumber, emailAddress) VALUES (?,?,?,?,?,?,?)";
                     pst = con.prepareStatement(sql);

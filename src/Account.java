@@ -4,6 +4,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.Properties;
@@ -23,6 +24,8 @@ public class Account implements Draw{
     protected JLabel emailDisplay = new JLabel();
     protected JLabel balanceDisplay = new JLabel();
     protected JPanel btnPanel = new JPanel();
+    protected File currentDir = new File("");
+    protected String path = currentDir.getAbsolutePath();
     Account(int customer_ID){
         drawForm();
         drawMenu(customer_ID);
@@ -125,7 +128,7 @@ public class Account implements Draw{
         String currentBalance = "";
         try {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            con = DriverManager.getConnection("jdbc:ucanaccess://C:\\Project\\GUI_Database.accdb");
+            con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
 
             String sql = "select * from CUSTOMER_INFO where customer_ID='" + ID + "'";
             pst = con.prepareStatement(sql);
@@ -258,7 +261,7 @@ public class Account implements Draw{
                     Calendar newUserDate = (Calendar) userDate;
                     java.sql.Date sqlDate =  new java.sql.Date(newUserDate.getTimeInMillis());
                     Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-                    con = DriverManager.getConnection("jdbc:ucanaccess://C:\\Project\\GUI_Database.accdb");
+                    con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
                     String sql = "UPDATE CUSTOMER_INFO SET birthDate='" + sqlDate +"', sex='" + sex + "', civilStatus='" + civil + "', address='"+ address + "', contactNumber='" + contact+ "', emailAddress='" + email +"' WHERE customer_ID='" + userID +"'";
 
                     pst = con.prepareStatement(sql);
@@ -272,6 +275,8 @@ public class Account implements Draw{
                         contactField.setText("");
                         emailField.setText("");
                         datePicker.setToolTipText("");
+                        accountFrm.dispose();
+                        new Login();
                     }
                 }catch (SQLException | ClassNotFoundException error) {
                     error.printStackTrace();

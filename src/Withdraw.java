@@ -4,6 +4,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.Properties;
@@ -12,6 +13,8 @@ public class Withdraw implements Draw{
     protected JFrame withdrawFrm = new JFrame();
     protected PreparedStatement pst = null;
     protected Connection con = null;
+    protected File currentDir = new File("");
+    protected String path = currentDir.getAbsolutePath();
     Withdraw(JFrame frame, int cust_ID){
         drawForm();
         drawLabels(frame, cust_ID);
@@ -126,7 +129,7 @@ public class Withdraw implements Draw{
                 }else{
                     try {
                         Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-                        con = DriverManager.getConnection("jdbc:ucanaccess://C:\\Project\\GUI_Database.accdb");
+                        con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
                         String sql = "INSERT INTO WITHDRAW_HISTORY (customer_ID, withdrawalDate, withdrawalAmount) VALUES (?,?,?)";
 
                         pst = con.prepareStatement(sql);

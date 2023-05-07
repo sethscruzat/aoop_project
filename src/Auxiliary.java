@@ -22,8 +22,10 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 
 public class Auxiliary {
+    protected static File currentDir = new File("");
+    protected static String path = currentDir.getAbsolutePath();
     public static boolean convertQR(String text) throws WriterException, IOException {
-        String filePath = "C:\\Project\\QRCode.png";
+        String filePath = path + "\\QRCode.png";
         int size = 600;
         String fileType = "png";
         File qrFile = new File(filePath);
@@ -96,7 +98,7 @@ public class Auxiliary {
             String currency;
 
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            con = DriverManager.getConnection("jdbc:ucanaccess://C:\\Project\\GUI_Database.accdb");
+            con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
             String sql = "select * from WITHDRAW_HISTORY where customer_ID='" + ID + "'";
             pst = con.prepareStatement(sql);
             rs = pst.executeQuery();
@@ -143,7 +145,7 @@ public class Auxiliary {
             String currency;
 
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            con = DriverManager.getConnection("jdbc:ucanaccess://C:\\Project\\GUI_Database.accdb");
+            con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
             String sql = "select * from DEPOSIT_HISTORY where customer_ID='" + ID + "'";
             pst = con.prepareStatement(sql);
             rs = pst.executeQuery();
