@@ -5,7 +5,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-
+/*
+    Class which will let users check their history
+    of withdrawals and deposits if any through mainly
+    the use of tables.
+ */
 public class History implements Draw{
     protected JFrame historyFrm = new JFrame();
     protected File currentDir = new File("");
@@ -19,7 +23,7 @@ public class History implements Draw{
         drawTables(customer_ID);
     }
     @Override
-    public void drawForm(){
+    public void drawForm(){ // draws the main screen
         historyFrm.setTitle("Welcome!");
         historyFrm.setLayout(null);
         historyFrm.setVisible(true);
@@ -28,16 +32,18 @@ public class History implements Draw{
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - historyFrm.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - historyFrm.getHeight()) / 2);
+        // sets the location of the frame so that it's always centered
         historyFrm.setLocation(x, y);
-        historyFrm.getContentPane().setBackground(new Color(222,194,186));
+        historyFrm.getContentPane().setBackground(Auxiliary.mainColor);
     }
 
     @Override
-    public void drawMenu(int ID){
+    public void drawMenu(int ID){ // draws the menu bar on the upper portion of the frame
         JMenu menu = new JMenu("Options");
         JMenuBar menuBar = new JMenuBar();
         JMenuItem item1, item2;
 
+        // When clicked, users are taken to the login screen
         item1 = new JMenuItem("Logout");
         item1.addActionListener(e -> {
             int a = JOptionPane.showConfirmDialog(historyFrm, "Are you sure you want to logout?");
@@ -47,6 +53,7 @@ public class History implements Draw{
             }
         });
 
+        // When clicked, prompts users with a confirmation dialog for exiting
         item2 = new JMenuItem("Exit");
         item2.addActionListener(e -> {
             int a = JOptionPane.showConfirmDialog(historyFrm, "Are you sure you want to exit?");
@@ -55,10 +62,10 @@ public class History implements Draw{
             }
         });
 
-        menuBar.setBackground(new Color(251,250,249));
-        menu.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-        item1.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-        item2.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        menuBar.setBackground(Auxiliary.highlightColor);
+        menu.setFont(Auxiliary.font_14);
+        item1.setFont(Auxiliary.font_14);
+        item2.setFont(Auxiliary.font_14);
 
         menu.add(item1);
         menu.add(item2);
@@ -66,23 +73,26 @@ public class History implements Draw{
         historyFrm.setJMenuBar(menuBar);
     }
 
+    // Draws the labels in the frame
     public void drawLabels(){
         JLabel withdrawLabel = new JLabel("Withdrawals");
         JLabel depositLabel = new JLabel("Deposits");
 
         withdrawLabel.setBounds(135,230,150,40);
-        withdrawLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 20));
+        withdrawLabel.setFont(Auxiliary.font_20);
 
         depositLabel.setBounds(560,230,150,40);
-        depositLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 20));
+        depositLabel.setFont(Auxiliary.font_20);
 
         historyFrm.add(withdrawLabel);
         historyFrm.add(depositLabel);
+
+        // Draws the header of the screen
         try {
             BufferedImage myPicture = ImageIO.read(new File(path+"\\img\\header.png"));
-            Image newImage = myPicture.getScaledInstance(800, 225, Image.SCALE_AREA_AVERAGING);
+            Image newImage = myPicture.getScaledInstance(790, 225, Image.SCALE_AREA_AVERAGING);
             JLabel header = new JLabel(new ImageIcon(newImage));
-            header.setBounds(0,0,800,225);
+            header.setBounds(0,0,790,225);
 
             historyFrm.add(header);
         } catch (IOException error){
@@ -90,6 +100,9 @@ public class History implements Draw{
         }
     }
 
+    // Draws the withdrawal and deposit tables which
+    // serve as display for the user to check their
+    // history of withdraws and deposits.
     public void drawTables(int ID) {
         JScrollPane withdrawPane = new JScrollPane(Auxiliary.getWithdrawValues(ID));
         JScrollPane depositPane = new JScrollPane(Auxiliary.getDepositValues(ID));
@@ -105,11 +118,12 @@ public class History implements Draw{
     public void drawButtons(JFrame account) {
         JButton returnBtn = new JButton("Return");
         returnBtn.setBounds(660,575,100,27);
-        returnBtn.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
-        returnBtn.setBackground(new Color(237,226,222));
+        returnBtn.setFont(Auxiliary.font_16);
+        returnBtn.setBackground(Auxiliary.subColor);
 
         historyFrm.add(returnBtn);
 
+        // When clicked, returns users to the account screen.
         returnBtn.addActionListener(e -> {
             historyFrm.dispose();
             account.setVisible(true);
