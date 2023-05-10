@@ -158,61 +158,81 @@ public class Withdraw implements Draw{
         generate.addActionListener(e -> {
             String moneyDisplay = amountField.getText();
             Object userDate = datePicker.getJFormattedTextField().getValue();
+            int money;
 
             // Shows a message dialog for when users try to generate a qr code but
             // don't input anything/input incorrectly in the required fields
             if (moneyDisplay.equals("") || userDate == null){
                 JOptionPane.showMessageDialog(withdrawFrm,"Please input values in the required fields");
             }else{
-                int money = Integer.parseInt(amountField.getText());
+
+                try {
+                     money = Integer.parseInt(amountField.getText());
+                } catch(NumberFormatException stringInput){
+                    JOptionPane.showMessageDialog(withdrawFrm,"Please enter a valid integer");
+                    amountField.setText("");
+                    amountField.requestFocus();
+                    throw stringInput;
+                }
+
                 Calendar newUserDate = (Calendar) userDate;
                 java.sql.Date sqlDate =  new java.sql.Date(newUserDate.getTimeInMillis());
 
-                if(money < 1000){
-                    JOptionPane.showMessageDialog(withdrawFrm,"Please enter an amount higher than or equal to 1000");
-                }else{
-                    try {
-                        Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-                        con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
-                        String sql = "SELECT currentBalance from CUSTOMER_INFO where customer_ID='" + userID + "'";
-                        pst = con.prepareStatement(sql);
-                        rs = pst.executeQuery();
-                        int balance = rs.getInt("currentBalance");
-                        if (balance == 0){
-                            throw new SQLException();
-                        } else {
-                            sql = "INSERT INTO WITHDRAW_HISTORY (customer_ID, withdrawalDate, withdrawalAmount) VALUES (?,?,?)";
+                Calendar today = Calendar.getInstance();
+                java.sql.Date tempdate =  new java.sql.Date(today.getTimeInMillis());
 
+                try {
+                    if (money < 1000) {
+                        JOptionPane.showMessageDialog(withdrawFrm, "Please enter an amount higher than or equal to 1000");
+                    } else if (sqlDate.compareTo(tempdate) < 0) { // Checks to see if the user inputted a future date instead of a past date.
+                        throw new Exception();
+                    } else {
+                        try {
+                            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+                            con = DriverManager.getConnection("jdbc:ucanaccess://" + path + "\\GUI_Database.accdb");
+                            String sql = "SELECT * from CUSTOMER_INFO where customer_ID='" + userID + "'";
                             pst = con.prepareStatement(sql);
-                            pst.setInt(1, userID);
-                            pst.setDate(2,sqlDate);
-                            pst.setInt(3,money);
+                            rs = pst.executeQuery();
+                            while (rs.next()) {
+                                String balance = rs.getString("currentBalance");
+                                float bal = Float.parseFloat(balance);
+                                if (bal < money) {
+                                    throw new SQLException();
+                                } else {
+                                    sql = "INSERT INTO WITHDRAW_HISTORY (customer_ID, withdrawalDate, withdrawalAmount) VALUES (?,?,?)";
 
-                            // Asks users for confirmation before logging the details into the database
-                            int a = JOptionPane.showConfirmDialog(withdrawFrm, "Confirm Transaction?");
-                            if(a== JOptionPane.YES_OPTION){
-                                pst.execute();
-                                String tempID = String.valueOf(userID);
-                                String tempDate = String.valueOf(sqlDate);
-                                String tempAmount = String.valueOf(money);
+                                    pst = con.prepareStatement(sql);
+                                    pst.setInt(1, userID);
+                                    pst.setDate(2, sqlDate);
+                                    pst.setInt(3, money);
 
-                                // Stores the info that the user inputted into a string, which will be encoded in the qr code
-                                String QRInfo = "Customer ID: " + tempID + "\n" + "Date of Withdrawal: " + tempDate + "\n" + "Amount to Withdraw: Php" + tempAmount;
-                                boolean success = Auxiliary.convertQR(QRInfo);
-                                if(success) {
-                                    JOptionPane.showMessageDialog(withdrawFrm,"QR Code has been successfully created");
+                                    // Asks users for confirmation before logging the details into the database
+                                    int a = JOptionPane.showConfirmDialog(withdrawFrm, "Confirm Transaction?");
+                                    if (a == JOptionPane.YES_OPTION) {
+                                        pst.execute();
+                                        String tempID = String.valueOf(userID);
+                                        String tempDate = String.valueOf(sqlDate);
+                                        String tempAmount = String.valueOf(money);
+
+                                        // Stores the info that the user inputted into a string, which will be encoded in the qr code
+                                        String QRInfo = "Customer ID: " + tempID + "\n" + "Date of Withdrawal: " + tempDate + "\n" + "Amount to Withdraw: Php" + tempAmount;
+                                        boolean success = Auxiliary.convertQR(QRInfo);
+                                        if (success) {
+                                            JOptionPane.showMessageDialog(withdrawFrm, "QR Code has been successfully created");
+                                        }
+                                    }
+                                    amountField.setText("");
                                 }
                             }
+                        } catch (SQLException | ClassNotFoundException noBalanceError) {
+                            JOptionPane.showMessageDialog(withdrawFrm, "You have no sufficient balance in your account.");
                             amountField.setText("");
+                            amountField.requestFocus();
+                        } catch (WriterException | IOException qrError) {
+                            JOptionPane.showMessageDialog(withdrawFrm, "Error during QR generation process.");
                         }
-                    } catch (SQLException | ClassNotFoundException noBalanceError) {
-                        JOptionPane.showMessageDialog(withdrawFrm,"You have no remaining balance in your account.");
-                        amountField.setText("");
-                        amountField.requestFocus();
-                    }catch (WriterException | IOException qrError){
-                        JOptionPane.showMessageDialog(withdrawFrm, "Error during QR generation process.");
                     }
-                }
+                } catch (Exception dateError) { JOptionPane.showMessageDialog(withdrawFrm, "Please enter a valid date for withdrawal.");}
             }
         });
 

@@ -151,51 +151,66 @@ public class Deposit implements Draw{
         generate.addActionListener(e -> {
             String moneyDisplay = amountField.getText();
             Object userDate = datePicker.getJFormattedTextField().getValue();
+            int money;
 
             // Shows a message dialog for when users try to generate a qr code but
             // don't input anything/input incorrectly in the required fields
             if (moneyDisplay.equals("") || userDate == null){
                 JOptionPane.showMessageDialog(depositFrm,"Please input values in the required fields");
             }else{
-                int money = Integer.parseInt(amountField.getText());
+                try {
+                    money = Integer.parseInt(amountField.getText());
+                } catch(NumberFormatException stringInput){
+                    JOptionPane.showMessageDialog(depositFrm,"Please enter a valid integer");
+                    amountField.setText("");
+                    amountField.requestFocus();
+                    throw stringInput;
+                }
+
                 Calendar newUserDate = (Calendar) userDate;
                 java.sql.Date sqlDate =  new java.sql.Date(newUserDate.getTimeInMillis());
 
-                if(money < 1000){
-                    JOptionPane.showMessageDialog(depositFrm,"Please enter an amount higher than or equal to 1000");
-                }else{
-                    try {
-                        Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-                        con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
-                        String sql = "INSERT INTO DEPOSIT_HISTORY (customer_ID, depositedDate, depositedAmount) VALUES (?,?,?)";
+                Calendar today = Calendar.getInstance();
+                java.sql.Date tempdate =  new java.sql.Date(today.getTimeInMillis());
+                try {
+                    if(money < 1000){
+                        JOptionPane.showMessageDialog(depositFrm,"Please enter an amount higher than or equal to 1000");
+                    }else if (sqlDate.compareTo(tempdate) < 0) { // Checks to see if the user inputted a future date instead of a past date.
+                        throw new Exception();
+                    }else{
+                        try {
+                            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+                            con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
+                            String sql = "INSERT INTO DEPOSIT_HISTORY (customer_ID, depositedDate, depositedAmount) VALUES (?,?,?)";
 
-                        pst = con.prepareStatement(sql);
-                        pst.setInt(1, userID);
-                        pst.setDate(2,sqlDate);
-                        pst.setInt(3,money);
+                            pst = con.prepareStatement(sql);
+                            pst.setInt(1, userID);
+                            pst.setDate(2,sqlDate);
+                            pst.setInt(3,money);
 
-                        // Asks users for confirmation before logging the details into the database
-                        int a = JOptionPane.showConfirmDialog(depositFrm, "Confirm Transaction?");
-                        if(a== JOptionPane.YES_OPTION){
-                            pst.execute();
-                            String tempID = String.valueOf(userID);
-                            String tempDate = String.valueOf(sqlDate);
-                            String tempAmount = String.valueOf(money);
+                            // Asks users for confirmation before logging the details into the database
+                            int a = JOptionPane.showConfirmDialog(depositFrm, "Confirm Transaction?");
+                            if(a== JOptionPane.YES_OPTION){
+                                pst.execute();
+                                String tempID = String.valueOf(userID);
+                                String tempDate = String.valueOf(sqlDate);
+                                String tempAmount = String.valueOf(money);
 
-                            // Stores the info that the user inputted into a string, which will be encoded in the qr code
-                            String QRInfo = "Customer ID: " + tempID + "\n" + "Date of Deposit: " + tempDate + "\n" + "Amount to Deposit: Php" + tempAmount;
-                            boolean success = Auxiliary.convertQR(QRInfo);
-                            if(success) {
-                                JOptionPane.showMessageDialog(depositFrm,"QR Code has been successfully created");
+                                // Stores the info that the user inputted into a string, which will be encoded in the qr code
+                                String QRInfo = "Customer ID: " + tempID + "\n" + "Date of Deposit: " + tempDate + "\n" + "Amount to Deposit: Php" + tempAmount;
+                                boolean success = Auxiliary.convertQR(QRInfo);
+                                if(success) {
+                                    JOptionPane.showMessageDialog(depositFrm,"QR Code has been successfully created");
+                                }
                             }
+                            amountField.setText("");
+                        }catch (SQLException | ClassNotFoundException databaseError){
+                            JOptionPane.showMessageDialog(depositFrm, "Error when finding database.");
+                        } catch (WriterException | IOException qrError){
+                            JOptionPane.showMessageDialog(depositFrm, "Error during QR generation process.");
                         }
-                        amountField.setText("");
-                    }catch (SQLException | ClassNotFoundException databaseError){
-                        JOptionPane.showMessageDialog(depositFrm, "Error when finding database.");
-                    } catch (WriterException | IOException qrError){
-                        JOptionPane.showMessageDialog(depositFrm, "Error during QR generation process.");
                     }
-                }
+                } catch (Exception dateError) {JOptionPane.showMessageDialog(depositFrm, "Please enter a valid date for deposit.");}
             }
         });
 
