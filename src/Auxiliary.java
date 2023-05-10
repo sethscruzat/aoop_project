@@ -20,8 +20,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 /*
-    Class that contains auxiliary functions that are static so that other
-    classes can refer to these functions directly. The functions in this
+    Class that contains auxiliary functions and variables that are static so that other
+    classes can refer to these functions directly. The functions  and variables in this
     class are used multiple times across different classes.
  */
 

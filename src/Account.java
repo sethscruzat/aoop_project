@@ -1,10 +1,14 @@
+import net.ucanaccess.complex.Attachment;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.Properties;
@@ -30,15 +34,16 @@ public class Account implements Draw{
     protected JLabel emailDisplay = new JLabel();
     protected JLabel balanceDisplay = new JLabel();
     protected JPanel btnPanel = new JPanel();
+    protected JLabel iconDisplay = new JLabel();
     protected File currentDir = new File("");
     protected String path = currentDir.getAbsolutePath();
     Account(int customer_ID){
         drawForm();
         drawMenu(customer_ID);
-        paint();
         drawLabels();
         drawDisplay(customer_ID);
         drawButtons(customer_ID);
+        drawProfilePicture(customer_ID);
     }
     @Override
     public void drawForm(){ // Draws the user account screen
@@ -88,13 +93,6 @@ public class Account implements Draw{
         item1.setFont(Auxiliary.font_14);
         item2.setFont(Auxiliary.font_14);
         accountFrm.setJMenuBar(menuBar);
-    }
-
-    public void paint(){
-        JPanel temp = new JPanel();
-        temp.setBackground(new Color(196,240,173));
-        temp.setBounds(50,50,150,150);
-        accountFrm.add(temp);
     }
 
     // Draws the labels for the account screen.
@@ -212,6 +210,34 @@ public class Account implements Draw{
         accountFrm.add(contactDisplay);
         accountFrm.add(emailDisplay);
         accountFrm.add(balanceDisplay);
+    }
+
+    // Function that draws the user's profile picture from the database.
+    public void drawProfilePicture(int ID){
+        try {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            con = DriverManager.getConnection("jdbc:ucanaccess://" + path +"\\GUI_Database.accdb");
+
+            // SQL Command for extracting the necessary fields from the database based on the user's customer id
+            String sql = "select profilePicture from CUSTOMER_INFO where customer_ID='" + ID + "'";
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            while(rs.next()){
+                iconDisplay.setIcon(new ImageIcon(ImageIO.read(new ByteArrayInputStream(((Attachment[])rs.getObject("profilePicture"))[0].getData())).getScaledInstance(150,150, Image.SCALE_AREA_AVERAGING)));
+            }
+            iconDisplay.setBounds(50,50,150,150);
+            accountFrm.add(iconDisplay);
+
+        }catch (SQLException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(accountFrm, "Error when finding database.");
+        } catch(IOException | ArrayIndexOutOfBoundsException noImage) {
+            JPanel temp = new JPanel();
+            temp.setBackground(Auxiliary.highlightColor);
+            temp.setBounds(50,50,150,150);
+            accountFrm.add(temp);
+            JOptionPane.showMessageDialog(accountFrm, "User has no profile picture in database");
+        }
     }
 
     // Function used when user clicks on "Edit Account?" on the menu
